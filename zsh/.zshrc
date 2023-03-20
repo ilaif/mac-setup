@@ -87,15 +87,25 @@ function gitbprune() {
   git fetch -p
   git branch -vv | grep ': gone]' | grep -Ev "^\*" | awk '{ print $1; }' | xargs -r git branch -D
 }
+function velocity_env() {
+  cat ~/.config/velocity/cli.yml 2>/dev/null | yq e ".current-env"
+}
 
-#PS1='%{$PROMPT_SUCCESS_COLOR%}%~%{$reset_color%} ${fg[yellow]}($(cat ~/.config/velocity/cli.yml 2>/dev/null | yq e ".current-env"))${reset_color}%{$GIT_PROMPT_INFO%}$(git_prompt_info)$(virtualenv_prompt_info)%{$GIT_DIRTY_COLOR%}$(git_prompt_status) %{$reset_color%}
-#%{$PROMPT_PROMPT%}ᐅ%{$reset_color%} '
+# Prompt
+PROMPT="${FG[117]}%~%{$reset_color%}\$(git_prompt_info)\$(virtualenv_prompt_info)${fg[yellow]}(\$(velocity_env))${FG[133]}\$(git_prompt_status)
+${FG[077]}ᐅ%{$reset_color%} "
 
 # Golang
 export GOVER=1.18
 export GOPATH="$HOME/go"
 export PATH="$GOPATH/bin:$PATH"
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+
+# Needed for golangci-lint
+export PATH="/opt/homebrew/opt/diffutils/bin:$PATH"
+
+# Disable CGO on local runs
+export CGO_ENABLED=0
 
 # Github
 export GITHUB_TOKEN=$(cat $HOME/.secret/ilaif_gh_token)
@@ -120,7 +130,6 @@ export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 eval "$(direnv hook zsh)"
 
 # Gcloud
-export CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
 source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 

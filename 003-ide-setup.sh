@@ -65,6 +65,7 @@ if test ! $(which brew); then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     vecho "Add brew to your shell based on the above instructions, and run the script again"
+    exit 1
 fi
 
 vecho "Updating brew"
@@ -80,12 +81,14 @@ brew tap bufbuild/buf
 declare -a brew_packages=(
     coreutils
     findutils # Install GNU `find`, `locate`, `updatedb`, and `xargs`, g-prefixed
+    diffutils # Required for goanalysis_metalinter
     jq
     yq
     tmux
     vim
     wget
     curl
+    htop
     kubectl
     kube-ps1
     direnv
@@ -142,6 +145,7 @@ declare -a brew_cask_packages=(
     todoist
     goland
     datagrip
+    slack
 )
 
 for pkg in "${brew_cask_packages[@]}"; do
@@ -215,6 +219,9 @@ pip install virtualenv
 vecho "Install python virtualenvwrapper"
 pip install virtualenvwrapper
 
+vecho "Installing poetry"
+curl -sSL https://install.python-poetry.org | python3 -
+
 #########
 ## K8s ##
 #########
@@ -230,6 +237,8 @@ vecho "Installing K8S Krew"
     tar zxvf "${KREW}.tar.gz"
     ./"${KREW}" install krew
 )
+
+gcloud components install gke-gcloud-auth-plugin
 
 ###############
 ## Terraform ##
