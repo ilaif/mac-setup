@@ -114,6 +114,11 @@ declare -a brew_packages=(
     pipenv
     pyenv
     terraform-docs
+    starship # prompt
+    neovim # terminal ide
+    zoxide # z for improved cd
+    lf # list files
+    bat # cat with syntax highlighting
 )
 
 for pkg in "${brew_packages[@]}"; do
@@ -146,12 +151,20 @@ declare -a brew_cask_packages=(
     goland
     datagrip
     slack
+    tailscale
 )
 
 for pkg in "${brew_cask_packages[@]}"; do
     vecho "brew install cask ${pkg}"
     install_or_upgrade_cask ${pkg} || true
 done
+
+#############
+## GH Exts ##
+#############
+
+gh extension install ilaif/gh-prx
+gh extension install mislav/gh-branch
 
 ############
 ## Golang ##
@@ -200,11 +213,11 @@ vecho "Installing Node.JS"
 
 nvm install ${NODE_VER}
 nvm use ${NODE_VER}
+nvm alias default ${NODE_VER}
 node --version > ~/.node-version
 
 vecho "Install npm packages"
 npm i -g jest
-npm i -g @stoplight/spectral-cli
 
 ############
 ## Python ##

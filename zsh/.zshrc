@@ -20,6 +20,8 @@ if type brew &>/dev/null; then
   compinit -C
 fi
 
+export PATH=$HOME/.tmux/plugins/t-smart-tmux-session-manager/bin:$PATH
+
 export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="muse"
 DISABLE_MAGIC_FUNCTIONS=true
@@ -38,6 +40,7 @@ plugins=(
   github
   macos
   npm
+  nvm
   node
   docker
   docker-compose
@@ -49,6 +52,8 @@ plugins=(
 PATH="$HOME/.local/bin:$PATH"
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/local/git/bin:/tools:/platform-tools:$HOME/bin:$PATH"
 source $ZSH/oh-my-zsh.sh
+
+eval "$(starship init zsh)"
 
 # Alias
 alias pastejson='pbpaste | python -m json.tool'
@@ -69,9 +74,10 @@ alias gitco='git checkout'
 alias gitca='git commit -am'
 alias glgn="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias mk='minikube'
-alias pr_create='gitbprune && python ~/git/velocity/toolz/pr-create/pr_create.py'
+alias pr_create='gitbprune && gh prx create'
 alias git-latest-tag='git describe --tags $(git rev-list --tags --max-count=1)'
 alias port_process='port_process $1'
+alias cat='bat'
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -87,29 +93,22 @@ function gitbprune() {
   git fetch -p
   git branch -vv | grep ': gone]' | grep -Ev "^\*" | awk '{ print $1; }' | xargs -r git branch -D
 }
-function velocity_env() {
-  cat ~/.config/velocity/cli.yml 2>/dev/null | yq e ".current-env"
-}
-
-# Prompt
-PROMPT="${FG[117]}%~%{$reset_color%}\$(git_prompt_info)\$(virtualenv_prompt_info)${fg[yellow]}(\$(velocity_env))${FG[133]}\$(git_prompt_status)
-${FG[077]}ᐅ%{$reset_color%} "
 
 # Golang
-export GOVER=1.18
 export GOPATH="$HOME/go"
 export PATH="$GOPATH/bin:$PATH"
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+export CGO_ENABLED=1
 
 # Needed for golangci-lint
 export PATH="/opt/homebrew/opt/diffutils/bin:$PATH"
 
-# Disable CGO on local runs
-export CGO_ENABLED=0
-
 # Github
 export GITHUB_TOKEN=$(cat $HOME/.secret/ilaif_gh_token)
 export NODE_AUTH_TOKEN=$(cat $HOME/.secret/ilaif_gh_token)
+
+# Jira
+export JIRA_API_TOKEN=$(cat $HOME/.secret/ilai_jira_token)
 
 # NVM (Node JS)
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
@@ -152,8 +151,15 @@ eval "$(pyenv init -)"
 export PATH="$PATH:$HOME/.rvm/bin"
 export PATH="$HOME/.gem/bin:$PATH"
 
+# Github CLI Copilot
+eval "$(github-copilot-cli alias -- "$0")"
+
 # Load other aliases
 [ -f "$HOME/.aliases" ] && source $HOME/.aliases
+
+eval "$(zoxide init zsh)"
+
+export PATH="/opt/homebrew/bin:$PATH"
 
 if [[ "$PROFILING_ENABLED" == "1" ]]; then
   zprof; zmodload -u zsh/zprof

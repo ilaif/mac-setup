@@ -32,3 +32,6 @@ ln -f alacritty/.alacritty.yml $HOME/.alacritty.yml
 
 vecho "Hardlinking scripts/open-ide.sh to $HOME/.open-ide.sh"
 ln -f scripts/.open-ide.sh $HOME/.open-ide.sh
+
+vecho "Hardlinking starship.tomk to $HOME/.config/starship.toml"
+ln -f starship.toml $HOME/.config/starship.toml

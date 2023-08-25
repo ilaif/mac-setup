@@ -382,7 +382,8 @@ set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @plugin 'tmux-plugins/tmux-yank'
 set -g @plugin 'CrispyConductor/tmux-copy-toolkit'
 set -g @continuum-restore 'on'
-
+set -g @plugin 'joshmedeski/tmux-fzf-url'
+set -g @plugin 'joshmedeski/t-smart-tmux-session-manager'
 
 # -- custom variables ----------------------------------------------------------
 
@@ -408,3 +409,14 @@ set -g @continuum-restore 'on'
 #
 # "$@"
 # # /!\ do not remove the previous line
+
+set -g default-terminal "xterm-256color"
+set-option -ga terminal-overrides ",xterm-256color:Tc"
+
+set -g status-left "#[fg=blue,bold]#S" # session name
+set -g status-left-length 200          # increase length (from 10)
+set -g status-right ''                 # blank
+set -g status-style 'bg=default'       # transparent
+
+bind-key x kill-pane # skip "kill-pane 1? (y/n)" prompt
+set -g detach-on-destroy off  # don't exit from tmux when closing a session

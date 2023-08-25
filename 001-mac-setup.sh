@@ -6,9 +6,9 @@ function vecho() {
     echo "[\033[1;32mMAC-SETUP\033[0m] ${1}"
 }
 
-vecho "##################################"
-vecho "# Welcome to Velocity MAC setup! #"
-vecho "##################################"
+vecho "#########################"
+vecho "# Welcome to MAC setup! #"
+vecho "#########################"
 echo ""
 
 DO_VIRTENWRAP=y
