@@ -1,39 +1,27 @@
 #!/bin/sh
 
+set -e
+
+source ./shared.sh
+
+function vecho() {
+    echo "[\033[1;32mIDE-SETUP\033[0m] ${1}"
+}
+
 # VERSIONS
 
-TERRAFORM_VER=1.1.3
+TERRAFORM_VER=1.5.6
 GOLINES_VER=v0.10.0
 BUF_VER=0.56.0
 PROTOC_VER=3
 PROTOC_GEN_GO_VER=1.27.1
 PROTOC_GEN_GO_GRPC_VER=1.2.0
-GO_VER=1.18
-NODE_VER=16
+GO_VER=1.20
+NODE_VER=18
 GOLANGCI_LINT_VER=v1.49.0
 OAPI_CODEGEN_VER=v1.12.4
 MOCKERY_VER=v2.14.0
 PYTHON_VER=3.11
-
-function vecho() {
-    echo "[\033[1;32mIDE-SETUP\033[0m] ${1}"
-}
-function install_or_upgrade() {
-    if brew ls --versions "$1" >/dev/null; then
-        HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade "$1"
-    else
-        HOMEBREW_NO_AUTO_UPDATE=1 brew install "$1"
-    fi
-}
-function install_or_upgrade_cask() {
-    if brew ls --cask --versions "$1" >/dev/null; then
-        HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade --cask "$1"
-    else
-        HOMEBREW_NO_AUTO_UPDATE=1 brew install --cask "$1"
-    fi
-}
-
-set -e
 
 vecho "#########################"
 vecho "# Welcome to IDE setup! #"
@@ -59,14 +47,6 @@ git config --global user.email "${email}"
 ##############
 ## Homebrew ##
 ##############
-
-if test ! $(which brew); then
-    vecho "Installing homebrew"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-    vecho "Add brew to your shell based on the above instructions, and run the script again"
-    exit 1
-fi
 
 vecho "Updating brew"
 brew update
@@ -262,10 +242,3 @@ gcloud components install gke-gcloud-auth-plugin
 vecho "Installing terraform"
 tfenv install $TERRAFORM_VER
 tfenv use $TERRAFORM_VER
-
-############
-## NeoVim ##
-############
-
-git clone https://github.com/LazyVim/starter ~/.config/nvim
-rm -rf ~/.config/nvim/.git

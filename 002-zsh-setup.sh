@@ -2,6 +2,8 @@
 
 set -e
 
+source ./shared.sh
+
 function vecho() {
     echo "[\033[1;32mZSH-SETUP\033[0m] ${1}"
 }
@@ -21,20 +23,6 @@ vecho "Installing tmux"
 git clone https://github.com/gpakosz/.tmux.git $HOME/.tmux
 ln -s -f $HOME/.tmux/.tmux.conf $HOME/.tmux.conf
 
-vecho "Hardlinking tmux/.tmux.conf.local to $HOME/.tmux.conf.local"
-ln -f tmux/.tmux.conf.local $HOME/.tmux.conf.local
-
-vecho "Hardlinking zsh/.zshrc to $HOME/.zshrc"
-ln -f zsh/.zshrc $HOME/.zshrc
-
-vecho "Hardlinking vim/.vimrc to $HOME/.vimrc"
-ln -f vim/.vimrc $HOME/.vimrc
-
-vecho "Hardlinking alacritty/.alacritty.yml to $HOME/.alacritty.yml"
-ln -f alacritty/.alacritty.yml $HOME/.alacritty.yml
-
-vecho "Hardlinking scripts/open-ide.sh to $HOME/.open-ide.sh"
-ln -f scripts/.open-ide.sh $HOME/.open-ide.sh
-
-vecho "Hardlinking starship.tomk to $HOME/.config/starship.toml"
-ln -f starship.toml $HOME/.config/starship.toml
+vecho "Applying dotfiles"
+install_or_upgrade chezmoi
+chezmoi init --apply https://github.com/ilaif/dotfiles.git
