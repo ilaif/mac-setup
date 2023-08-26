@@ -32,6 +32,7 @@ plugins=(
   zsh-completions
   zsh-autosuggestions
   zsh-syntax-highlighting
+  zsh-histdb
   colored-man-pages
   brew
   python
@@ -54,6 +55,13 @@ export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X
 source $ZSH/oh-my-zsh.sh
 
 eval "$(starship init zsh)"
+
+# Zioxide
+eval "$(zoxide init zsh)"
+
+# histdb fzf
+source ~/.oh-my-zsh/custom/plugins/zsh-histdb-fzf/fzf-histdb.zsh
+bindkey '^R' histdb-fzf-widget
 
 # Alias
 alias pastejson='pbpaste | python -m json.tool'
@@ -78,6 +86,7 @@ alias pr_create='gitbprune && gh prx create'
 alias git-latest-tag='git describe --tags $(git rev-list --tags --max-count=1)'
 alias port_process='port_process $1'
 alias cat='bat'
+alias vim='nvim'
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -122,9 +131,6 @@ nvm() {
 if [ /usr/local/bin/kubectl ]; then source <(kubectl completion zsh); fi
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 
-# Fuzzy searching
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 # Direnv
 eval "$(direnv hook zsh)"
 
@@ -156,8 +162,6 @@ eval "$(github-copilot-cli alias -- "$0")"
 
 # Load other aliases
 [ -f "$HOME/.aliases" ] && source $HOME/.aliases
-
-eval "$(zoxide init zsh)"
 
 export PATH="/opt/homebrew/bin:$PATH"
 

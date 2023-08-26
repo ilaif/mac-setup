@@ -119,6 +119,7 @@ declare -a brew_packages=(
     zoxide # z for improved cd
     lf # list files
     bat # cat with syntax highlighting
+    nvim # terminal ide
 )
 
 for pkg in "${brew_packages[@]}"; do
@@ -139,6 +140,7 @@ declare -a brew_cask_packages=(
     1password
     1password/tap/1password-cli
     homebrew/cask-fonts/font-jetbrains-mono
+    homebrew/cask-fonts/font-jetbrains-mono-nerd-font
     notion
     docker
     alacritty
@@ -260,3 +262,10 @@ gcloud components install gke-gcloud-auth-plugin
 vecho "Installing terraform"
 tfenv install $TERRAFORM_VER
 tfenv use $TERRAFORM_VER
+
+############
+## NeoVim ##
+############
+
+git clone https://github.com/LazyVim/starter ~/.config/nvim
+rm -rf ~/.config/nvim/.git
