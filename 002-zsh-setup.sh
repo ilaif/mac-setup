@@ -18,6 +18,7 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ${OH_MY_ZSH_PLUGINS}/
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${OH_MY_ZSH_PLUGINS}/zsh-syntax-highlighting || true
 git clone https://github.com/larkery/zsh-histdb ${OH_MY_ZSH_PLUGINS}/zsh-histdb
 git clone https://github.com/m42e/zsh-histdb-fzf.git ${OH_MY_ZSH_PLUGINS}/zsh-histdb-fzf
+git clone https://github.com/Aloxaf/fzf-tab ${OH_MY_ZSH_PLUGINS}/fzf-tab
 
 vecho "Installing tmux"
 git clone https://github.com/gpakosz/.tmux.git $HOME/.tmux
