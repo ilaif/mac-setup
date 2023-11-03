@@ -10,18 +10,13 @@ function vecho() {
 
 # VERSIONS
 
-TERRAFORM_VER=1.5.6
-GOLINES_VER=v0.10.0
-BUF_VER=0.56.0
-PROTOC_VER=3
-PROTOC_GEN_GO_VER=1.27.1
-PROTOC_GEN_GO_GRPC_VER=1.2.0
-GO_VER=1.20
-NODE_VER=18
-GOLANGCI_LINT_VER=v1.49.0
-OAPI_CODEGEN_VER=v1.12.4
-MOCKERY_VER=v2.14.0
-PYTHON_VER=3.11
+TERRAFORM_VER=1.6.3
+GOLINES_VER=v0.11.0
+GO_VER=1.21
+NVM_VER=v0.39.5
+NODE_VER=20
+GOLANGCI_LINT_VER=v1.55.1
+PYTHON_VER=3.12
 
 vecho "#########################"
 vecho "# Welcome to IDE setup! #"
@@ -36,13 +31,15 @@ xcode-select --install || true
 ##############
 
 vecho "Setting up git"
-ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-echo "Choose a username for git:"
-read username
-git config --global user.name "${username}"
-echo "Choose an email for git:"
-read email
-git config --global user.email "${email}"
+if [ -z "$(git config --global user.name)" ]; then
+    ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+    echo "Choose a username for git:"
+    read username
+    git config --global user.name "${username}"
+    echo "Choose an email for git:"
+    read email
+    git config --global user.email "${email}"
+fi
 
 ##############
 ## Homebrew ##
@@ -53,10 +50,7 @@ brew update
 
 vecho "Installing brew packages"
 
-brew tap yoheimuta/protolint
-brew tap vmware-tanzu/carvel
 brew tap goreleaser/tap
-brew tap bufbuild/buf
 
 declare -a brew_packages=(
     coreutils
@@ -70,27 +64,19 @@ declare -a brew_packages=(
     curl
     htop
     kubectl
-    kube-ps1
     direnv
     fzf
     gh
     awscli
     pre-commit
     helm
-    circleci
-    grpcurl
     kustomize
-    kapp
     semgrep
     goreleaser
-    bufbuild/buf/buf
     tfenv
     kubectx
     k9s
-    k3d
-    protolint
-    protobuf@${PROTOC_VER}
-    nvm
+    kind
     pipenv
     pyenv
     terraform-docs
@@ -100,6 +86,8 @@ declare -a brew_packages=(
     lf # list files
     bat # cat with syntax highlighting
     nvim # terminal ide
+    lazygit
+    dust # du with syntax highlighting
 )
 
 for pkg in "${brew_packages[@]}"; do
@@ -114,7 +102,6 @@ vecho "Installing brew casks"
 
 declare -a brew_cask_packages=(
     visual-studio-code
-    iterm2
     google-cloud-sdk
     postman
     1password
@@ -128,12 +115,12 @@ declare -a brew_cask_packages=(
     zoom
     raycast
     telegram
-    rambox
     todoist
-    goland
+    # goland
     datagrip
     slack
-    tailscale
+    arc
+    rectangle
 )
 
 for pkg in "${brew_cask_packages[@]}"; do
@@ -145,6 +132,8 @@ done
 ## GH Exts ##
 #############
 
+vecho "Installing gh extensions"
+gh auth login
 gh extension install ilaif/gh-prx
 gh extension install mislav/gh-branch
 
@@ -153,34 +142,23 @@ gh extension install mislav/gh-branch
 ############
 
 vecho "Installing gvm (go version manager)"
-zsh < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-source /Users/ilaif/.gvm/scripts/gvm
+bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+source $HOME/.gvm/scripts/gvm
 
 vecho "Installing Go ${GO_VER}"
+brew install go
 gvm install go${GO_VER}
 gvm use go${GO_VER} --default
+brew uninstall go
 
 declare -a go_packages=(
-    gotest.tools/gotestsum@latest
     github.com/segmentio/golines@$GOLINES_VER
-    github.com/fdaines/arch-go@latest
-    github.com/swaggo/swag/cmd/swag@latest
-    github.com/deepmap/oapi-codegen/cmd/oapi-codegen@${OAPI_CODEGEN_VER}
-    google.golang.org/protobuf/cmd/protoc-gen-go@v${PROTOC_GEN_GO_VER}
-    google.golang.org/grpc/cmd/protoc-gen-go-grpc@v${PROTOC_GEN_GO_GRPC_VER}
-    github.com/vektra/mockery/v2@${MOCKERY_VER}
 )
 
 for pkg in "${go_packages[@]}"; do
     vecho "go install ${pkg}"
     go install ${pkg}
 done
-
-vecho "Installing buf"
-curl -sSL \
-    "https://github.com/bufbuild/buf/releases/download/v${BUF_VER}/buf-$(uname -s)-$(uname -m)" \
-    -o "/usr/local/bin/buf" &&
-    chmod +x "/usr/local/bin/buf"
 
 vecho "Installing golangci-lint"
 curl -sSfL \
@@ -191,15 +169,17 @@ curl -sSfL \
 ## Node.JS ##
 #############
 
-vecho "Installing Node.JS"
+vecho "Installing NVM"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VER/install.sh | bash
 
+vecho "Installing Node.JS"
 nvm install ${NODE_VER}
 nvm use ${NODE_VER}
 nvm alias default ${NODE_VER}
 node --version > ~/.node-version
 
 vecho "Install npm packages"
-npm i -g jest
+npm install -g @githubnext/github-copilot-cli
 
 ############
 ## Python ##

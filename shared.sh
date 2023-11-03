@@ -7,8 +7,8 @@ function install_brew() {
         vecho "Installing homebrew"
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-        vecho "Add brew to your shell based on the above instructions, and run the script again"
-        exit 1
+        vecho "Adding homebrew to shell PATH"
+	    eval "$(/opt/homebrew/bin/brew shellenv)"
     fi
 }
 

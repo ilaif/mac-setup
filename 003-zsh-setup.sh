@@ -16,12 +16,13 @@ OH_MY_ZSH_PLUGINS="${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins"
 git clone https://github.com/zsh-users/zsh-completions ${OH_MY_ZSH_PLUGINS}/zsh-completions || true
 git clone https://github.com/zsh-users/zsh-autosuggestions ${OH_MY_ZSH_PLUGINS}/zsh-autosuggestions || true
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${OH_MY_ZSH_PLUGINS}/zsh-syntax-highlighting || true
-git clone https://github.com/larkery/zsh-histdb ${OH_MY_ZSH_PLUGINS}/zsh-histdb
-git clone https://github.com/m42e/zsh-histdb-fzf.git ${OH_MY_ZSH_PLUGINS}/zsh-histdb-fzf
-git clone https://github.com/Aloxaf/fzf-tab ${OH_MY_ZSH_PLUGINS}/fzf-tab
+git clone https://github.com/larkery/zsh-histdb ${OH_MY_ZSH_PLUGINS}/zsh-histdb || true
+git clone https://github.com/m42e/zsh-histdb-fzf.git ${OH_MY_ZSH_PLUGINS}/zsh-histdb-fzf || true
+git clone https://github.com/Aloxaf/fzf-tab ${OH_MY_ZSH_PLUGINS}/fzf-tab || true
 
 vecho "Installing tmux"
-git clone https://github.com/gpakosz/.tmux.git $HOME/.tmux
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git clone https://github.com/gpakosz/.tmux.git $HOME/.tmux || true
 ln -s -f $HOME/.tmux/.tmux.conf $HOME/.tmux.conf
 
 vecho "Applying dotfiles"

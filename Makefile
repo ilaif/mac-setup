@@ -8,10 +8,10 @@ help:
 mac-setup:
 	./001-mac-setup.sh
 
-zsh-setup:
-	./002-shrc-setup.sh
-
 ide-setup:
-	./003-ide-setup.sh
+	./002-ide-setup.sh
 
-all: mac-setup zsh-setup ide-setup
+zsh-setup:
+	./003-zsh-setup.sh
+
+all: mac-setup ide-setup zsh-setup

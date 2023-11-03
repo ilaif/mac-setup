@@ -20,10 +20,8 @@ DO_FASTER_KEY=n
 DO_FAST_WINDOW_RESIZING=y
 
 function question() {
-    # Print question
     echo $1
     select yn in "yes" "no"; do
-        # Save answer in the given variable
         case $yn in
         "yes")
             eval "$2=y"
@@ -37,7 +35,6 @@ function question() {
     done
 }
 
-# Configure installation by user input
 function configure() {
     vecho "Great, let me ask you some questions:"
     echo ""
@@ -67,47 +64,46 @@ sudo softwareupdate -ia
 
 vecho "Configuring macOS"
 
-# Make key repeat and initial key repeat faster
 if [ "$DO_FASTER_KEY" = "y" ]; then
+    vecho "Faster key repeat"
     defaults write -g InitialKeyRepeat -int 15
     defaults write -g KeyRepeat -int 1
 fi
 
-# Require password as soon as screensaver or sleep mode starts
 if [ "$DO_SCREENPASS" = "y" ]; then
+    vecho "Require password as soon as screensaver or sleep mode starts"
     defaults write com.apple.screensaver askForPassword -int 1
     defaults write com.apple.screensaver askForPasswordDelay -int 0
 fi
 
-# Show filename extensions by default
+vecho "Show filename extensions by default"
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
-# Enable tap-to-click
+vecho "Enable tap-to-click"
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
-# Disable "natural" scroll
 if [ "$DO_NATURALSCROLL" = "y" ]; then
+    vecho "Disable natural scroll"
     defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 fi
 
-# Disable smart quotes as they’re annoying when typing code
+vecho "Disable smart quotes"
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 
-# Disable smart dashes as they’re annoying when typing code
+vecho "Disable smart dashes"
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 
-# Enable full keyboard access for all controls
-# (e.g. enable Tab in modal dialogs)
+vecho "Enable full keyboard access for all controls"
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 
-# Automatically hide and show the Dock
 if [ "$DO_AUTOHIDEDOCK" = "y" ]; then
+    vecho "Automatically hide and show the Dock"
     defaults write com.apple.dock autohide -bool true
 fi
 
-# Make showing the dock faster
 if [ "$DO_SHOWHIDEDOCKFASTER" = "y" ]; then
+    vecho "Make showing the dock faster"
     defaults write com.apple.Dock autohide-delay -float 0
     killall Dock
     defaults write com.apple.dock autohide-time-modifier -float 0.4
@@ -115,21 +111,14 @@ if [ "$DO_SHOWHIDEDOCKFASTER" = "y" ]; then
 fi
 
 if [ "$DO_FAST_WINDOW_RESIZING" = "y" ]; then
-    # Disable opening and closing window animations
+    vecho "Make window resizing animations faster"
     defaults write -g NSWindowResizeTime -float 0.003
 fi
 
-# Disable opening and closing window animations
+vecho "Disable opening and closing window animations"
 defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 
-# Privacy: don’t send search queries to Apple
-defaults write com.apple.Safari UniversalSearchEnabled -bool false
-defaults write com.apple.Safari SuppressSearchSuggestions -bool true
-
-# Make opening visor for iTerm2 faster
-defaults write com.googlecode.iterm2 HotkeyTermAnimationDuration -float 0.00001
-
-# Only use UTF-8 in Terminal.app
+vecho "Only use UTF-8 in Terminal.app"
 defaults write com.apple.terminal StringEncodings -array 4
 
 echo ""
