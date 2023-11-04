@@ -121,6 +121,9 @@ declare -a brew_cask_packages=(
     slack
     arc
     rectangle
+    google-drive
+    linear-linear
+    insomnia
 )
 
 for pkg in "${brew_cask_packages[@]}"; do
