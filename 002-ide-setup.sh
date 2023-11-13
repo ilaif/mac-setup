@@ -88,6 +88,7 @@ declare -a brew_packages=(
     nvim # terminal ide
     lazygit
     dust # du with syntax highlighting
+    cloudflared
 )
 
 for pkg in "${brew_packages[@]}"; do
@@ -124,6 +125,7 @@ declare -a brew_cask_packages=(
     google-drive
     linear-linear
     insomnia
+    licecap
 )
 
 for pkg in "${brew_cask_packages[@]}"; do

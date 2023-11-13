@@ -21,7 +21,7 @@ git clone https://github.com/m42e/zsh-histdb-fzf.git ${OH_MY_ZSH_PLUGINS}/zsh-hi
 git clone https://github.com/Aloxaf/fzf-tab ${OH_MY_ZSH_PLUGINS}/fzf-tab || true
 
 vecho "Installing tmux"
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm || true
 git clone https://github.com/gpakosz/.tmux.git $HOME/.tmux || true
 ln -s -f $HOME/.tmux/.tmux.conf $HOME/.tmux.conf
 
