@@ -20,12 +20,16 @@ git clone https://github.com/m42e/zsh-histdb-fzf.git "${ZSH_CUSTOM:-$HOME/.oh-my
 git clone https://github.com/Aloxaf/fzf-tab "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab" || true
 
 vecho "Installing tmux"
-git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm" || true
 git clone https://github.com/gpakosz/.tmux.git "$HOME/.tmux" || true
+git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm" || true
 ln -s -f "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
 
 vecho "Installing alacritty catppucin theme"
 git clone https://github.com/catppuccin/alacritty.git ~/.config/alacritty/catppuccin || true
+
+vecho "Touching $HOME/.secret/env"
+mkdir "$HOME/.secret" || true
+touch "$HOME/.secret/env"
 
 vecho "Applying dotfiles"
 install_or_upgrade chezmoi

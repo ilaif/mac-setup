@@ -12,7 +12,7 @@ vecho() {
 
 TERRAFORM_VER=1.6.3
 GOLINES_VER=v0.11.0
-GO_VER=1.21
+GO_VER=1.21.6
 NVM_VER=v0.39.5
 NODE_VER=20
 GOLANGCI_LINT_VER=v1.55.1
@@ -44,6 +44,8 @@ fi
 ##############
 ## Homebrew ##
 ##############
+
+install_brew
 
 vecho "Updating brew"
 brew update
@@ -89,12 +91,12 @@ declare -a brew_packages=(
   lazygit     # git ui
   dust        # du with syntax highlighting
   cloudflared # argo tunnel
-  plibq       # postgresql client
+  libpq       # postgresql client
   shellcheck  # shell linter
   ruff        # python linter
-  pnpm        # a better node package management
   watch
   tree
+  go # golang (later gvm will be installed to manage versions)
 )
 
 for pkg in "${brew_packages[@]}"; do
@@ -132,6 +134,8 @@ declare -a brew_cask_packages=(
   linear-linear
   insomnia
   licecap
+  raycast
+  stremio
 )
 
 for pkg in "${brew_cask_packages[@]}"; do
@@ -153,12 +157,15 @@ gh extension install mislav/gh-branch
 ############
 
 vecho "Installing gvm (go version manager)"
-bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+if [ -n "$(type gvm &>/dev/null)" ]; then
+  bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+fi
+set +e
 # shellcheck disable=SC1091
 source "$HOME/.gvm/scripts/gvm"
+set -e
 
 vecho "Installing Go ${GO_VER}"
-brew install go
 gvm install go${GO_VER}
 gvm use go${GO_VER} --default
 brew uninstall go
@@ -183,6 +190,8 @@ curl -sSfL \
 
 vecho "Installing NVM"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VER/install.sh | bash
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 vecho "Installing Node.JS"
 nvm install ${NODE_VER}
@@ -192,7 +201,6 @@ node --version >~/.node-version
 
 vecho "Install npm packages"
 npm install -g @githubnext/github-copilot-cli
-npm install -g npx
 npm install -g @escape.tech/mookme
 
 ############
@@ -202,6 +210,10 @@ npm install -g @escape.tech/mookme
 vecho "Installing Python"
 pyenv install ${PYTHON_VER}
 pyenv global ${PYTHON_VER}
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 vecho "Install python virtualenv"
 pip install virtualenv
@@ -236,3 +248,15 @@ gcloud components install gke-gcloud-auth-plugin
 vecho "Installing terraform"
 tfenv install $TERRAFORM_VER
 tfenv use $TERRAFORM_VER
+
+################
+## Other Apps ##
+################
+
+vecho "Other apps to install:"
+vecho "* Okta Verify: https://apps.apple.com/us/app/okta-verify/id490179405"
+vecho "* Login to google drive"
+vecho "* Import settings from personal-drive/dev/environment/raycast.export"
+vecho "* Open RayCast and configure"
+vecho "* Open 1Password and configure"
+vecho "* Open VSCode and login to Settings & Sync"
