@@ -4,8 +4,8 @@ set -e
 
 source ./shared.sh
 
-function vecho() {
-  printf "[\033[1;32mZSH-SETUP\033[0m] %s\n" "$1"
+vecho() {
+	printf "[\033[1;32mZSH-SETUP\033[0m] %s\n" "$1"
 }
 
 vecho "Installing Oh-My-Zsh"
@@ -23,6 +23,9 @@ vecho "Installing tmux"
 git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm" || true
 git clone https://github.com/gpakosz/.tmux.git "$HOME/.tmux" || true
 ln -s -f "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
+
+vecho "Installing alacritty catppucin theme"
+git clone https://github.com/catppuccin/alacritty.git ~/.config/alacritty/catppuccin || true
 
 vecho "Applying dotfiles"
 install_or_upgrade chezmoi

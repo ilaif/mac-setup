@@ -2,7 +2,7 @@
 
 set -e
 
-function vecho() {
+vecho() {
   printf "[\033[1;32mMAC-SETUP\033[0m] %s\n" "$1"
 }
 
@@ -18,7 +18,7 @@ DO_SHOWHIDEDOCKFASTER=y
 DO_FASTER_KEY=n
 DO_FAST_WINDOW_RESIZING=y
 
-function question() {
+question() {
   echo "$1"
   select yn in "yes" "no"; do
     case $yn in
@@ -34,7 +34,7 @@ function question() {
   done
 }
 
-function configure() {
+configure() {
   vecho "Great, let me ask you some questions:"
   echo ""
   question "Require password as soon as screensaver or sleep mode starts?" DO_SCREENPASS

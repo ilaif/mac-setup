@@ -4,7 +4,7 @@ set -e
 
 source ./shared.sh
 
-function vecho() {
+vecho() {
   printf "[\033[1;32mIDE-SETUP\033[0m] %s\n" "$1"
 }
 
@@ -93,15 +93,14 @@ declare -a brew_packages=(
   shellcheck  # shell linter
   ruff        # python linter
   pnpm        # a better node package management
+  watch
+  tree
 )
 
 for pkg in "${brew_packages[@]}"; do
   vecho "brew install ${pkg}"
   install_or_upgrade "${pkg}"
 done
-
-vecho "Linking packages"
-brew link --force libpq
 
 vecho "Installing fzf bindings"
 "$(brew --prefix)/opt/fzf/install"
@@ -193,6 +192,8 @@ node --version >~/.node-version
 
 vecho "Install npm packages"
 npm install -g @githubnext/github-copilot-cli
+npm install -g npx
+npm install -g @escape.tech/mookme
 
 ############
 ## Python ##
