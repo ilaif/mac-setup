@@ -12,7 +12,7 @@ vecho() {
 
 TERRAFORM_VER=1.6.3
 GOLINES_VER=v0.11.0
-GO_VER=1.21.6
+GO_VER=1.23.0
 NVM_VER=v0.39.5
 NODE_VER=20
 GOLANGCI_LINT_VER=v1.55.1
@@ -157,7 +157,7 @@ gh extension install mislav/gh-branch
 ############
 
 vecho "Installing gvm (go version manager)"
-if [ -n "$(type gvm &>/dev/null)" ]; then
+if ! type gvm &>/dev/null; then
   bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 fi
 set +e
