@@ -1,5 +1,7 @@
 # Mac Setup
 
+## [DEPRECATED] This repository is no longer maintained. Please use [dotfiles](github.com/ilaif/dotfiles) instead.
+
 My personal mac setup scripts.
 
 Supports Mac OSX M1 Architectures.
